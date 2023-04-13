@@ -1,8 +1,11 @@
 import React,{useState} from 'react'
-// import {EditOutlined,AudioOutlined } from '@ant-design/icons'; 
+import { useParams } from 'react-router-dom';
+//import {EditOutlined,AudioOutlined } from '@ant-design/icons'; 
 // import { Input } from "antd";
 
-const WebLinks = () => {
+const WebLinks = ({props}) => {
+  const {id}=useParams();
+  const {data,setData}=props;
   const [edit,setEdit]=useState(false);
   const [links,setLinks]=useState({
     linkedIn:"",
@@ -13,8 +16,27 @@ const WebLinks = () => {
     website:""
   })
 
-  const editLinks=()=>{
+  const editLinks=async()=>{
     console.log(links.facebook,links.github,links.instagram,links.twitter,links.website,links.linkedIn)
+    try {
+      var res = await fetch("http://localhost:4000/weblinks/"+id, {
+        method: "PUT",
+        body: JSON.stringify({ links }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      res = await res.json();
+
+      console.log("OKK WEB")
+      
+      setLinks(res);
+      console.log("weblinks data", res)
+      //fetchData();
+
+    } catch (error) {
+      console.log("err in weblink",error.message)
+    }
   }
   const handleInputs = (e) => {
     const name = e.target.name;
@@ -79,30 +101,30 @@ const WebLinks = () => {
         <div class="grid grid-cols-1 gap-8 mt-4 sm:grid-cols-2">
             <div>
                 <label class="text-black font-medium" for="linkedIn">LinkedIn</label>
-                <input id="linkedIn" type="text" name='linkedIn' class="block w-full px-4 py-3 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md  focus:border-blue-500  focus:outline-none focus:ring" disabled={!edit} onChange={handleInputs}/>
+                <input placeholder='linkedIn'  id="linkedIn" type="text"  name='linkedIn' class="block w-full px-4 py-3 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md  focus:border-blue-500  focus:outline-none focus:ring" disabled={!edit} onChange={handleInputs}/>
             </div>
 
             <div>
                 <label class="text-black font-medium" for="github">Github</label>
-                <input id="github" type="text" name='github' class="block w-full px-4 py-3 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md   focus:border-blue-500  focus:outline-none focus:ring" disabled={!edit} onChange={handleInputs}/>
+                <input placeholder='Github' id="github" type="text" name='github' class="block w-full px-4 py-3 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md   focus:border-blue-500  focus:outline-none focus:ring" disabled={!edit} onChange={handleInputs}/>
             </div>
 
             <div>
                 <label class="text-black font-medium" for="facebook">Facebook</label>
-                <input id="facebook" type="text" name="facebook" class="block w-full px-4 py-3 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md focus:border-blue-500  focus:outline-none focus:ring" disabled={!edit} onChange={handleInputs}/>
+                <input placeholder='Facebook' id="facebook" type="text" name="facebook" class="block w-full px-4 py-3 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md focus:border-blue-500  focus:outline-none focus:ring" disabled={!edit} onChange={handleInputs}/>
             </div>
 
             <div>
                 <label class="text-black font-medium" for="twitter">Twitter</label>
-                <input id="twitter" type="text" name='twitter' class="block w-full px-4 py-3 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md focus:border-blue-500 focus:outline-none focus:ring" disabled={!edit} onChange={handleInputs}/>
+                <input placeholder='Twitter' id="twitter" type="text" name='twitter' class="block w-full px-4 py-3 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md focus:border-blue-500 focus:outline-none focus:ring" disabled={!edit} onChange={handleInputs}/>
             </div>
             <div>
                 <label class="text-black font-medium" for="instagram">Instagram</label>
-                <input id="instagram" type="text" name='instagram' class="block w-full px-4 py-3 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md focus:border-blue-500 focus:outline-none focus:ring" disabled={!edit} onChange={handleInputs}/>
+                <input placeholder='Instagram' id="instagram" type="text" name='instagram' class="block w-full px-4 py-3 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md focus:border-blue-500 focus:outline-none focus:ring" disabled={!edit} onChange={handleInputs}/>
             </div>
             <div>
                 <label class="text-black font-medium" for="website">Website</label>
-                <input id="website" type="text" name='website' class="block w-full px-4 py-3 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md focus:border-blue-500 focus:outline-none focus:ring" disabled={!edit} onChange={handleInputs}/>
+                <input  placeholder='Website' id="website" type="text" name='website' class="block w-full px-4 py-3 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md focus:border-blue-500 focus:outline-none focus:ring" disabled={!edit} onChange={handleInputs}/>
             </div>
         </div>
 
